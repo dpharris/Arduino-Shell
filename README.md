@@ -588,7 +588,7 @@ Script:
 
 Query bit #6 from reg, and report:
 ```
- :reg@6B&{Present)}{(Absent)}e
+ :reg@6B&{(Present)}{(Absent)}e
 ```
  
 ### Random
@@ -602,14 +602,14 @@ Roll a dice, and report:
 
 Print Dong at noon:
 ```
- 0xQt12_T={(Dong)m}i
+ {0xQt12_T={(Dong)m}iF}w
 ```
 
 ### I2C
 
 Send to MCP23017 I/O Expander, addressed as 0x40:
 ```
- [0x08,0x12,0x40]_I or :v@1+,0x12,0x40,3_I   -- write to GPIOA(0x12) the value (0x08 or :v@1+)
+ [0x08,0x12,0x40]_I or 8,0x12,0x40,3_I   -- write 8 to GPIOA(0x12) on chip at I2C-address 0x40
 ```
 Read from MCP23017, register GPIO(0x12):
 ```
