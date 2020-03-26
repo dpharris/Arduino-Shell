@@ -213,13 +213,24 @@ Binary literal numbers are prefixed with `0b`, and hexadecimal with
 ```
  10 . 0b10 . 0x10 .
 ```
-Time literal numbers are prefixed with `0Q`:
+**Time literal numbers are prefixed with `0Q`:**
 ```
- 10    - ms
+ 10    - 10 ms
  0Qs10 - 10 seconds
+ 0Qm10 - 10 minutes
  0Qh10 - 10 hours
- 0Qt8:30:15 - specific time
+ 0Qt8:30.3 - specific time: 08:60:18
 ```
+**Note, these are implemented as ranges: **
+Unit | Value Range | Time Range |Note 
+-------|:----------|:--------------|:---------
+ ms | 0-19,999 | 0-20s |
+ s | 20,000-29,999 | 0s-10,000s/166min/2.7h |
+ min | 30,000-39,999 | 0min-10,000min/166h/7days |
+ hour | 40,000-49,999 | 0h-10,000h/416d/1year |
+ time | 50,000-64400 | 00:00.1-23:59.9 |
+ 
+ **Note: be careful with comparisons.**  
 
 ### Literal Characters
 
