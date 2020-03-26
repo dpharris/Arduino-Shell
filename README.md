@@ -168,11 +168,12 @@ Y | -- | list **words** | WORDS
 Z | -- | toggle trace mode |
 
 ### Extensions (subject to change)
-**_c | -- channel | current channel
-_p | channel -- pin# | pin associated with this channel
-_i | n addr -- data | Wire.read(addr,n,&data)
-_I | data n addr -- | Wire.write(addr,n,data)
-**
+Opcode | Parameters | Description | Forth
+-------|:-----------|:------------|:-----
+**_c** | -- channel | current channel
+**_p** | channel -- pin# | pin associated with this channel
+**_i** | n addr -- data | Wire.read(addr,n,&data)
+**_I** | data n addr -- | Wire.write(addr,n,data)
 
 ## Special forms
 
@@ -229,14 +230,24 @@ Quote (apostrophe) a character to push it on the parameter stack.
 
 ### Printing items
 
- `2b` sets base to binary and `10.` prints as `0b1010`.
- `8b` sets base to octal and `19.` prints as `0o12`.
- `16b` sets base to hexadecimal and `10.` prints as `0xa`.
- **`1b` sets base to time and `0Qt10:30:15.` prints as `10:30:15`;**
+  - `2b` sets base to binary`;
+```
+   `10.` prints as `0b1010`.
+```
+  - `8b` sets base to octal`;
+```
+   `19.` prints as `0o12`.
+```
+  - `16b` sets base to hexadecimal`:
+```
+   `10.` prints as `0xa`.
+```
+  - **`1b`** sets base to time:
 ```     
  `10.` prints as `10ms`
  `0Qs10.` prints as `10s`
  `0Qh10.` prints as `10h`
+ `0Qt10:30:15.` prints as `10:30:15`;
 ```
 
 ### Variables
