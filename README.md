@@ -582,3 +582,36 @@ Script:
  [1,2,3,4,5,6,7,8]0,1r{d+}l
 ```
 
+## Extension examples:
+
+### Bitmask
+
+Query bit #6 from reg, and report:
+```
+ :reg@6B&{Present)}{(Absent)}e
+```
+ 
+### Random
+
+Roll a dice, and report:
+```
+ 6Vu0={(One)}iu1={(Two)}iu2={(Three)}iu3={(Four)}iu4={(Five)}i5={(Six)}i
+```
+
+### Time
+
+Print Dong at noon:
+```
+ 0xQt12_T={(Dong)m}i
+```
+
+### I2C
+
+Send to MCP23017 I/O Expander, addressed as 0x40:
+```
+ [0x08,0x12,0x40]_I or :v@1+,0x12,0x40,3_I   -- write to GPIOA(0x12) the value (0x08 or :v@1+)
+```
+Read from MCP23017, register GPIO(0x12):
+```
+ [0x12,0x40]_I,1,0x40_i   -- addresses the chip and register address, then reads from it.  
+```
