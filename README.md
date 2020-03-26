@@ -168,12 +168,14 @@ Y | -- | list **words** | WORDS
 Z | -- | toggle trace mode |
 
 ### Extensions (subject to change)
-Opcode | Parameters | Description | Forth
--------|:-----------|:------------|:-----
+Opcode | Parameters | Description 
+-------|:-----------|:------------
 **_c** | -- channel | current channel
 **_p** | channel -- pin# | pin associated with this channel
 **_i** | n addr -- data | Wire.read(addr,n,&data)
 **_I** | data n addr -- | Wire.write(addr,n,data)
+**_F** | -- fastclock | returns FastClock value
+**_T** | -- realtime  | returns RealtimeClock value
 
 ## Special forms
 
