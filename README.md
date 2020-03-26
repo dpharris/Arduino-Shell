@@ -257,10 +257,11 @@ Quote (apostrophe) a character to push it on the parameter stack.
 ```
   - **`1b`** sets base to time:
 ```     
- `10.` prints as `10ms`
- `0Qs10.` prints as `10s`
- `0Qh10.` prints as `10h`
- `0Qt10:30:15.` prints as `10:30:15`;
+ `10.` prints as `10ms `
+ `0Qs10.` prints as `10s `
+ `0Qm10.` prints as `10min `
+ `0Qh10.` prints as `10h `
+ `0Qt10:30:15.` prints as `10:30:15h `;
 ```
 
 ### Variables
