@@ -600,9 +600,9 @@ Roll a dice, and report:
 
 ### Time
 
-Print Dong at noon:
+Print "Bong" at noon:
 ```
- {0xQt12_T={(Dong)m}iF}w
+ {0xQt12_T={(Bong)m}iF}w
 ```
 
 ### I2C
@@ -613,5 +613,5 @@ Send to MCP23017 I/O Expander, addressed as 0x40:
 ```
 Read from MCP23017, register GPIO(0x12):
 ```
- [0x12,0x40]_I,1,0x40_i   -- addresses the chip and register address, then reads from it.  
+ [0x12,0x40]_I[1,0x40]_i   -- first address the chip and register address, then read 1 byte from it.  
 ```
