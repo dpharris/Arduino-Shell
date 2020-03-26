@@ -1,12 +1,14 @@
 # Arduino-Shell
 
-Please refer to the original Arduino-Shell.  Mikael Patek has done 
+## Changes/Extensions
+Please refer to the original **Arduino-Shell**.  *Mikael Patek* has done 
 an amazing tour de force.  
 
-I have made some chnages/extensions to allow multiple scripts to be 
-run pseudo-simultaneously.  This required implementing local-
-variables in a struct and reserving and freeing from the heap.   
-Changed are indicated by **change**.
+I have made some changes and extensions to allow multiple scripts to be run pseudo-simultaneously.  This required implementing local-variables in a struct and reserving and freeing from the heap.   
+
+Changed are indicated by **bolding**.
+
+## Intro
 
 This library provides a Forth/PostScript style shell for Arduino
 sketches. Shell is a virtual stack machine with a byte token threaded
@@ -227,13 +229,15 @@ Quote (apostrophe) a character to push it on the parameter stack.
 
 ### Printing items
 
- **`2b` sets base to binary and `10.` prints as `0b1010`.
+ `2b` sets base to binary and `10.` prints as `0b1010`.
  `8b` sets base to octal and `19.` prints as `0o12`.
  `16b` sets base to hexadecimal and `10.` prints as `0xa`.
- `1b` sets base to time and `0Qt10:30:15.` prints as `10:30:15`;
-       and `10.`, `0Qs10.`, `0Qh10.` print as 
-       `10ms`, `10s`, and `10h`, respectively.
-**
+ **`1b` sets base to time and `0Qt10:30:15.` prints as `10:30:15`;**
+```     
+ `10.` prints as `10ms`
+ `0Qs10.` prints as `10s`
+ `0Qh10.` prints as `10h`
+```
 
 ### Variables
 
@@ -276,6 +280,8 @@ allocation point is reset accordingly.
 ```
  :fun,f
 ```
+
+** Pseudo-simultanality is achieved by returning after each ``block`` executes, and then returning to complete the operations, ie** **w**hile, **l**oop, **i**f, if**e**lse, e**X**ecute, and **D**elay.  
 
 ### Control Structures
 
