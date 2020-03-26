@@ -1,5 +1,13 @@
 # Arduino-Shell
 
+Please refer to the original Arduino-Shell.  Mikael Patek has done 
+an amazing tour de force.  
+
+I have made some chnages/extensions to allow multiple scripts to be 
+run pseudo-simultaneously.  This required implementing local-
+variables in a struct and reserving and freeing from the heap.   
+Changed are indicated by **change**.
+
 This library provides a Forth/PostScript style shell for Arduino
 sketches. Shell is a virtual stack machine with a byte token threaded
 instruction set. The tokens, characters, are chosen so that it is
@@ -134,6 +142,7 @@ x | block -- | execute block | EXECUTE
 y | -- | yield for multi-tasking scheduler |
 z | addr -- | write variable to eeprom memory |
 A | pin -- sample | analogRead(pin) |
+**B** | bit# -- bitmask | bitmask(bit) |
 C | xn..x1 -- | clear | ABORT
 D | ms -- | delay |
 E | period addr -- bool | check if timer variable has expired |
@@ -150,10 +159,18 @@ R | pin --  bool | digitalRead(pin) |
 S | -- | print stack contents | .S
 T | -- true | true | TRUE
 U | pin -- | pinMode(pin, INPUT_PULLUP) |
+**V** | range -- random | random(range) |
 W | value pin -- | digitalWrite(pin, value) |
 X | pin -- | digitalToggle(pin)  |
-Y | -- | list dictionaries | WORDS
+Y | -- | list **words** | WORDS
 Z | -- | toggle trace mode |
+
+### Extensions (subject to change)
+**_c | -- channel | current channel
+_p | channel -- pin# | pin associated with this channel
+_i | n addr -- data | Wire.read(addr,n,&data)
+_I | data n addr -- | Wire.write(addr,n,data)
+**
 
 ## Special forms
 
@@ -193,6 +210,13 @@ Binary literal numbers are prefixed with `0b`, and hexadecimal with
 ```
  10 . 0b10 . 0x10 .
 ```
+Time literal numbers are prefixed with `0Q`:
+```
+ 10    - ms
+ 0Qs10 - 10 seconds
+ 0Qh10 - 10 hours
+ 0Qt8:30:15 - specific time
+```
 
 ### Literal Characters
 
@@ -200,6 +224,16 @@ Quote (apostrophe) a character to push it on the parameter stack.
 ```
  'A .
 ```
+
+### Printing items
+
+ **`2b` sets base to binary and `10.` prints as `0b1010`.
+ `8b` sets base to octal and `19.` prints as `0o12`.
+ `16b` sets base to hexadecimal and `10.` prints as `0xa`.
+ `1b` sets base to time and `0Qt10:30:15.` prints as `10:30:15`;
+       and `10.`, `0Qs10.`, `0Qh10.` print as 
+       `10ms`, `10s`, and `10h`, respectively.
+**
 
 ### Variables
 
