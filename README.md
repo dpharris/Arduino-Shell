@@ -242,11 +242,11 @@ Binary literal numbers are prefixed with `0b`, and hexadecimal with
 
 Unit | Value Range | Time Range |Note 
 -------|:----------|:--------------|:---------
- ms | 0-9,999 | 0-20s | 0ms-9,999ms/9.999s 
- us | 10,000-19,999 | 0us-9,999us/9.999ms 
- sec | 20,000-29,999 | 0s-9,999s/167min/2.78h 
- min | 30,000-39,999 | 0min-9,999min/167h/7d 
- hour | 40,000-49,999 | 0h-9,999h/416d/1year 
+ ms | 0-9,999 | 0ms-9,999ms / 9.999s 
+ us | 10,000-19,999 | 0us-9,999us / 9.999ms 
+ sec | 20,000-29,999 | 0s-9,999s / 167min / 2.78h 
+ min | 30,000-39,999 | 0min-9,999min / 167h / 7d 
+ hour | 40,000-49,999 | 0h-9,999h / 416d / 1year 
  time | 50,000-64400 | 00:00.0-23:59.9 
  
  **Note: be careful with comparisons.**  
@@ -618,9 +618,9 @@ Roll a dice, and report:
 
 ### Time
 
-Print "Bong" at noon:
+Print "Bong" at noon, once:
 ```
- {0xQt12_T={(Bong)m}iF}w
+ { Qt12_T= u{ (Bong)m }i ~}w
 ```
 
 ### I2C
@@ -631,5 +631,5 @@ Send to MCP23017 I/O Expander, addressed as 0x40:
 ```
 Read from MCP23017, register GPIO(0x12):
 ```
- [0x12,0x40]_I 1,0x40_i   -- first address the chip and register address, then read 1 byte from it.  
+ [0x12,0x40]_I 1,0x40_i   -- first address the chip and the register address, then read 1 byte from it.  
 ```
