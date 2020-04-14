@@ -95,6 +95,11 @@ File>Examples menu.
 
 Opcode | Parameters | Description | Forth
 -------|:-----------|:------------|:-----
+' | 'c | literal character |
+"text" | "..." -- | comment | (...)
+(text) | (chars) -- | print chars |
+[data] | [ d0 ... dn ] -- d0 ... dn n | stack block
+{code} | {code} -- addr | code block 
 , | -- | no operation |
 &#43; | x y -- x+y | addition | +
 &#45; | x y -- x-y | subtraction | -
@@ -215,20 +220,21 @@ Binary literal numbers are prefixed with `0b`, and hexadecimal with
 ```
  10 . 0b10 . 0x10 .
 ```
-**Time literal numbers are prefixed with `0Q`:**
+**Time literal numbers are prefixed with `Q`:**
 ```
- 10    - 10 ms
- 0Qs10 - 10 seconds
- 0Qm10 - 10 minutes
- 0Qh10 - 10 hours
- 0Qt8:30.3 - specific time: 08:60:18
+ 10   - 10 ms
+ Qu10 - 10 microseconds
+ Qs10 - 10 seconds
+ Qm10 - 10 minutes
+ Qh10 - 10 hours
+ Qt8:30.3 - specific time: 08:60:18
 ```
 **Note, these are implemented as ranges: **
 Unit | Value Range | Time Range |Note 
 -------|:----------|:--------------|:---------
  ms | 0-19,999 | 0-20s |
- s | 20,000-29,999 | 0s-10,000s/166min/2.7h |
- min | 30,000-39,999 | 0min-10,000min/166h/7days |
+ us | 20,000-29,999 | 0s-10,000s/166min/2.7h |
+ sec | 30,000-39,999 | 0min-10,000min/166h/7days |
  hour | 40,000-49,999 | 0h-10,000h/416d/1year |
  time | 50,000-64400 | 00:00.1-23:59.9 |
  
@@ -258,10 +264,11 @@ Quote (apostrophe) a character to push it on the parameter stack.
   - **`1b`** sets base to time:
 ```     
  `10.` prints as `10ms `
- `0Qs10.` prints as `10s `
- `0Qm10.` prints as `10min `
- `0Qh10.` prints as `10h `
- `0Qt10:30:15.` prints as `10:30:15h `;
+ `Qu10.` prints as `10us `
+ `Qs10.` prints as `10s `
+ `Qm10.` prints as `10min `
+ `Qh10.` prints as `10h `
+ `Qt10:30:15.` prints as `10:30:15h `;
 ```
 
 ### Variables
@@ -613,5 +620,5 @@ Send to MCP23017 I/O Expander, addressed as 0x40:
 ```
 Read from MCP23017, register GPIO(0x12):
 ```
- [0x12,0x40]_I[1,0x40]_i   -- first address the chip and register address, then read 1 byte from it.  
+ [0x12,0x40]_I 1,0x40_i   -- first address the chip and register address, then read 1 byte from it.  
 ```
