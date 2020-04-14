@@ -137,7 +137,7 @@ l | low high block( index -- ) -- | execute block from low to high | DO LOOP
 m | -- | write new line to output stream | CR
 n | x -- -x | negate | NEGATE
 o | x y -- x y x | over | OVER
-p | xn..x1 n -- xn..x1 xn | pick | PICK
+p | xm..x1 n -- xm..x1 xn | pick | PICK
 q | x -- [x x] or 0 | duplicate if not zero | ?DUP
 r | x y z --- y z x | rotate | ROT
 s | x y -- y x | swap | SWAP
@@ -613,7 +613,10 @@ Query bit #6 from reg, and report:
 
 Roll a dice, and report:
 ```
- 6Vu0={(One)}iu1={(Two)}iu2={(Three)}iu3={(Four)}iu4={(Five)}i5={(Six)}i
+ 6V u0={(One)}i u1={(Two)}i u2={(Three)}i u3={(Four)}i u4={(Five)}i 5={(Six)}i
+ or
+ [ {(Six)}, {(Five)}, {(Four)}, {(Three)}, {(Two)}, {(One)} ] V1+px ddddd
+   "leaves six vlocks on stack, picks a random one, and executes it, drops the others"
 ```
 
 ### Time
