@@ -96,7 +96,7 @@ File>Examples menu.
 Opcode | Parameters | Description | Forth
 -------|:-----------|:------------|:-----
 ' | 'c | literal character |
-**"..."** | **"text" --** | **comment** | 
+**"..."** | **"text" --** | **comment** | **(...)**
 (...) | (chars) -- | print chars |
 [...] | [ d0 ... dn ] -- d0 ... dn n | stack block
 {...} | {code} -- addr | code block 
@@ -262,15 +262,15 @@ Quote (apostrophe) a character to push it on the parameter stack.
 
   - `2b` sets base to binary`;
 ```
-   `10.` prints as `0b1010`.
+   `10.` prints as `0b1010 `.
 ```
   - `8b` sets base to octal`;
 ```
-   `19.` prints as `0o12`.
+   `19.` prints as `0o12 `.
 ```
   - `16b` sets base to hexadecimal`:
 ```
-   `10.` prints as `0xa`.
+   `10.` prints as `0xa `.
 ```
   - **`1b`** sets base to time:
 ```     
@@ -613,19 +613,21 @@ Query bit #6 from reg, and report:
 
 Roll a dice, and report:
 ```
- 6V u0={(One)}i u1={(Two)}i u2={(Three)}i u3={(Four)}i u4={(Five)}i 5={(Six)}i
+ 6V u2={(Three)}i u0={(One)}i u1={(Two)}i u3={(Four)}i u4={(Five)}i 5={(Six)}i
+   "Mimics a case-statement, but no default-case."
  or
  [ {(Six)}, {(Five)}, {(Four)}, {(Three)}, {(Two)}, {(One)} ] V1+px ddddd
-   "leaves six vlocks on stack, picks a random one, and executes it, drops the others"
+   "Leaves six blocks on stack, picks a random one and executes it, drops the others"
+   "Mimics a (seqential) case-statement."
 ```
 
 ### Time
 
-Delay 100 microseconds, note, this is a blocking-delay:
+Delay 100 microseconds, note that this is a blocking delay:
 ```
 Qu100D
 ```
-Delay 50 milliseconds, seconds, minutes, hours, respectively:
+Delay 50 milliseconds, seconds, minutes, hours, respectively,
 note that these are all non-blocking delays.
 ```
 50D
