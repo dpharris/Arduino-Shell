@@ -96,10 +96,10 @@ File>Examples menu.
 Opcode | Parameters | Description | Forth
 -------|:-----------|:------------|:-----
 ' | 'c | literal character |
-"text" | "..." -- | comment | (...)
-(text) | (chars) -- | print chars |
-[data] | [ d0 ... dn ] -- d0 ... dn n | stack block
-{code} | {code} -- addr | code block 
+**"..." | "text" -- | comment | (...)**
+(...) | (chars) -- | print chars |
+[...] | [ d0 ... dn ] -- d0 ... dn n | stack block
+{...} | {code} -- addr | code block 
 , | -- | no operation |
 &#43; | x y -- x+y | addition | +
 &#45; | x y -- x-y | subtraction | -
@@ -186,6 +186,15 @@ Opcode | Parameters | Description
 
 The shell script language allows several special forms such as literal
 values, blocks, control structures and argument frames.
+
+### Comments
+**Comments are indicated by surrounding them with "'s.  They are 
+skipped over in the scanning.  Do _not_ place them inside code 
+defintions, as that will slow down interpretation.  Rather, leave 
+them outside of definitions.  Eg: ***
+```
+:double{2*}; "(n -- 2*n) twice"
+```
 
 ### Boolean
 
