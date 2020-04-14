@@ -96,7 +96,7 @@ File>Examples menu.
 Opcode | Parameters | Description | Forth
 -------|:-----------|:------------|:-----
 ' | 'c | literal character |
-**"..." | "text" -- | comment | (...)**
+**"..."** | **"text" --** | **comment** | 
 (...) | (chars) -- | print chars |
 [...] | [ d0 ... dn ] -- d0 ... dn n | stack block
 {...} | {code} -- addr | code block 
