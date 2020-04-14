@@ -238,11 +238,11 @@ Binary literal numbers are prefixed with `0b`, and hexadecimal with
  Qh10 - 10 hours
  Qt8:30.3 - specific time: 08:60:18
 ```
-**Note, these are implemented as ranges: **
+**Note; these are implemented as ranges:**
 
 Unit | Value Range | Time Range |Note 
 -------|:----------|:--------------|:---------
- ms | 0-9,999 | 0ms-9,999ms / 9.999s 
+ ms | 0-9,999 | 0ms-9,999ms / 9.999s | for compatibiliy
  us | 10,000-19,999 | 0us-9,999us / 9.999ms 
  sec | 20,000-29,999 | 0s-9,999s / 167min / 2.78h 
  min | 30,000-39,999 | 0min-9,999min / 167h / 7d 
@@ -618,6 +618,18 @@ Roll a dice, and report:
 
 ### Time
 
+Delay 100 microseconds, note, this is a blocking-delay:
+```
+100D
+```
+Delay 50 milliseconds, seconds, minutes, hours,
+note that these are non-blocking delays:
+```
+50D
+Qs50D
+Qm50D
+Qh50D
+```
 Print "Bong" at noon, once:
 ```
  { Qt12_T= u{ (Bong)m }i ~}w
