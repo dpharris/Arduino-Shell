@@ -606,7 +606,7 @@ Script:
 
 Query bit #6 from reg, and report:
 ```
- :reg@6B&{(Present)}{(Absent)}e
+ :reg@ 6B & { (Present)m }{ (Absent)m }e
 ```
  
 ### Random
@@ -620,10 +620,10 @@ Roll a dice, and report:
 
 Delay 100 microseconds, note, this is a blocking-delay:
 ```
-100D
+Qu100D
 ```
-Delay 50 milliseconds, seconds, minutes, hours,
-note that these are non-blocking delays:
+Delay 50 milliseconds, seconds, minutes, hours, respectively:
+note that these are all non-blocking delays.
 ```
 50D
 Qs50D
