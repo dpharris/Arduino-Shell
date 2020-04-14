@@ -239,13 +239,15 @@ Binary literal numbers are prefixed with `0b`, and hexadecimal with
  Qt8:30.3 - specific time: 08:60:18
 ```
 **Note, these are implemented as ranges: **
+
 Unit | Value Range | Time Range |Note 
 -------|:----------|:--------------|:---------
- ms | 0-19,999 | 0-20s |
- us | 20,000-29,999 | 0s-10,000s/166min/2.7h |
- sec | 30,000-39,999 | 0min-10,000min/166h/7days |
- hour | 40,000-49,999 | 0h-10,000h/416d/1year |
- time | 50,000-64400 | 00:00.1-23:59.9 |
+ ms | 0-9,999 | 0-20s | 0ms-9,999ms/9.999s 
+ us | 10,000-19,999 | 0us-9,999us/9.999ms 
+ sec | 20,000-29,999 | 0s-9,999s/167min/2.78h 
+ min | 30,000-39,999 | 0min-9,999min/167h/7d 
+ hour | 40,000-49,999 | 0h-9,999h/416d/1year 
+ time | 50,000-64400 | 00:00.0-23:59.9 
  
  **Note: be careful with comparisons.**  
 
