@@ -176,16 +176,16 @@ Z | -- | toggle trace mode |
 ### Extensions (subject to change)
 Opcode | Parameters | Description 
 -------|:-----------|:------------
-**_c** | -- channel | current **__c__**hannel
-**_p** | channel -- pin# | **__p__**in associated with this channel
-**_i** | n addr -- data | **__i__**2c read: Wire.read(addr,n,&data)
-**_I** | data n addr -- | **__I__**2C write: Wire.write(addr,n,data)
-**_F** | -- fastclock | returns **__F__**astClock value
-**_T** | -- realtime  | returns Real**__T__**imeClock value
-**_P** | ch -- | **__P__**roduce the event for the channel
-**_R** | ch offset -- | Produce a **__R__**ange-eventid by adding offset to ch's eid
-**_r** | -- range | value in last **__r__**ange received
-**_S** | width -- | set **__S__**ervo to pulse-width, 800-2200ms
+**_c** | -- channel | current **c**hannel
+**_p** | channel -- pin# | **p**in associated with this channel
+**_i** | n addr -- data | **i**2c read: Wire.read(addr,n,&data)
+**_I** | data n addr -- | **I**2C write: Wire.write(addr,n,data)
+**_F** | -- fastclock | returns **F**astClock value
+**_T** | -- realtime  | returns Real**T**imeClock value
+**_P** | ch -- | **P**roduce the event for the channel
+**_R** | ch offset -- | Produce a **R**ange-eventid by adding offset to ch's eid
+**_r** | -- range | value in last **r**ange received
+**_S** | width -- | set **S**ervo to pulse-width, 800-2200ms
 
 ## Special forms
 
@@ -655,3 +655,35 @@ Read from MCP23017, register GPIO(0x12):
 ```
  [0x12,0x40]_I 1,0x40_i   -- first address the chip and the register address, then read 1 byte from it.  
 ```
+
+### Ranges
+
+_r and _R let you use eventid-ranges.  One of the eventids will be set with
+n-zero bits, and indicated in the 'range' field in the event by inserting the 
+number of bits to be used.  
+
+In this example, 2the two lower bits ware used to represent aspects: 
+ * 0 = Stop
+ * 1 = Caution
+ * 2 = Advanced caution
+ * 3 = Proceed
+ 
+ To consume a eventid-range: 
+ ```
+ _r0={4_pH} "if stop, turn on red"
+ ```
+ And to send a range member: 
+ ```
+ 12,3_R "report proceed aspect"
+ ```
+
+### Servos
+
+This uses the PCA9685, such as used on the Adafruit 16-channel servo board.  
+it uses the Adafruit library.  
+Set a servo#4 to 915 ms pulse-width:
+```
+915,4_S
+```
+
+ 
