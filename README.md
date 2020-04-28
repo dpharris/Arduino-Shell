@@ -162,6 +162,7 @@ M | -- ms | millis() |
 N | -- | no operation |
 O | pin -- | pinMode(pin, OUTPUT) |
 P | value pin -- | analogWrite(pin, value) |
+**Q** | Qx### | period/time literal, x = u,m,s,h,t for us, s, min, h, time
 R | pin --  bool | digitalRead(pin) |
 S | -- | print stack contents | .S
 T | -- true | true | TRUE
@@ -182,9 +183,9 @@ Opcode | Parameters | Description
 **_F** | -- fastclock | returns **F**astClock value
 **_T** | -- realtime  | returns Real**T**imeClock value
 **_P** | ch -- | **P**roduce the event for the channel
-**_R** | ch offset -- | Produce a **R**ange, add offset to ch's eid
-**_r** | -- range | value in last **r**ange receivede
-**_S** | width -- | set **S**ervo to width ms
+**_R** | ch offset -- | Produce a **R**ange-eventid by adding offset to ch's eid
+**_r** | -- range | value in last **r**ange received
+**_S** | width -- | set **S**ervo to pulse-width, 800-2200ms
 
 ## Special forms
 
@@ -192,8 +193,8 @@ The shell script language allows several special forms such as literal
 values, blocks, control structures and argument frames.
 
 ### Comments
-**Comments are indicated by surrounding them with "'s.  They are 
-skipped over in the scanning.  Do _not_ place them inside code 
+**Comments are indicated by surrounding them with "'s, eg "a comment".
+They are skipped over in the scanning.  Do _not_ place them inside code 
 defintions, as that will slow down interpretation.  Rather, leave 
 them outside of definitions.  Eg: ***
 ```
