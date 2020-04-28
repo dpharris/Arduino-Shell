@@ -175,12 +175,16 @@ Z | -- | toggle trace mode |
 ### Extensions (subject to change)
 Opcode | Parameters | Description 
 -------|:-----------|:------------
-**_c** | -- channel | current channel
-**_p** | channel -- pin# | pin associated with this channel
-**_i** | n addr -- data | Wire.read(addr,n,&data)
-**_I** | data n addr -- | Wire.write(addr,n,data)
-**_F** | -- fastclock | returns FastClock value
-**_T** | -- realtime  | returns RealtimeClock value
+**_c** | -- channel | current **c**hannel
+**_p** | channel -- pin# | **p**in associated with this channel
+**_i** | n addr -- data | **i**2c read: Wire.read(addr,n,&data)
+**_I** | data n addr -- | **I**2C write: Wire.write(addr,n,data)
+**_F** | -- fastclock | returns **F**astClock value
+**_T** | -- realtime  | returns Real**T**imeClock value
+**_P** | ch -- | **P**roduce the event for the channel
+**_R** | ch offset -- | Produce a **R**ange, add offset to ch's eid
+**_r** | -- range | value in last **r**ange receivede
+**_S** | width -- | set **S**ervo to width ms
 
 ## Special forms
 
