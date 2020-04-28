@@ -176,14 +176,14 @@ Z | -- | toggle trace mode |
 ### Extensions (subject to change)
 Opcode | Parameters | Description 
 -------|:-----------|:------------
-**_c** | -- channel | current **c**hannel
-**_p** | channel -- pin# | **p**in associated with this channel
+**_c** | -- ch | current **c**hannel
+**_p** | ch -- pin# | **p**in associated with this channel
 **_i** | n addr -- data | **i**2c read: Wire.read(addr,n,&data)
 **_I** | data n addr -- | **I**2C write: Wire.write(addr,n,data)
 **_F** | -- fastclock | returns **F**astClock value
 **_T** | -- realtime  | returns Real**T**imeClock value
 **_P** | ch -- | **P**roduce the event for the channel
-**_R** | ch offset -- | Produce a **R**ange-eventid by adding offset to ch's eid
+**_R** | offset ch -- | Produce a **R**ange-eventid by adding offset to ch's eid
 **_r** | -- range | value in last **r**ange received
 **_S** | width -- | set **S**ervo to pulse-width, 800-2200ms
 
@@ -640,7 +640,7 @@ Qs50D
 Qm50D
 Qh50D
 ```
-Print "Bong" at noon, once:
+Print "Bong" at noon, real-time, once:
 ```
  { Qt12_T= u{ (Bong)m }i ~}w
 ```
@@ -670,11 +670,11 @@ In this example, 2the two lower bits ware used to represent aspects:
  
  To consume a eventid-range: 
  ```
- _r0={4_pH} "if stop, turn on red"
+ _r0={4_pH} "if stop-aspect, turn on red"
  ```
  And to send a range member: 
  ```
- 12,3_R "report proceed aspect"
+ 3,12_R "report proceed-aspect on channel 12"
  ```
 
 ### Servos
