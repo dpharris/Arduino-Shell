@@ -176,16 +176,16 @@ Z | -- | toggle trace mode |
 ### Extensions (subject to change)
 Opcode | Parameters | Description 
 -------|:-----------|:------------
-**_c** | -- channel | current **c**hannel
-**_p** | channel -- pin# | **p**in associated with this channel
-**_i** | n addr -- data | **i**2c read: Wire.read(addr,n,&data)
-**_I** | data n addr -- | **I**2C write: Wire.write(addr,n,data)
-**_F** | -- fastclock | returns **F**astClock value
-**_T** | -- realtime  | returns Real**T**imeClock value
-**_P** | ch -- | **P**roduce the event for the channel
-**_R** | ch offset -- | Produce a **R**ange-eventid by adding offset to ch's eid
-**_r** | -- range | value in last **r**ange received
-**_S** | width -- | set **S**ervo to pulse-width, 800-2200ms
+**_c** | -- channel | current **__c__**hannel
+**_p** | channel -- pin# | **__p__**in associated with this channel
+**_i** | n addr -- data | **__i__**2c read: Wire.read(addr,n,&data)
+**_I** | data n addr -- | **__I__**2C write: Wire.write(addr,n,data)
+**_F** | -- fastclock | returns **__F__**astClock value
+**_T** | -- realtime  | returns Real**__T__**imeClock value
+**_P** | ch -- | **__P__**roduce the event for the channel
+**_R** | ch offset -- | Produce a **__R__**ange-eventid by adding offset to ch's eid
+**_r** | -- range | value in last **__r__**ange received
+**_S** | width -- | set **__S__**ervo to pulse-width, 800-2200ms
 
 ## Special forms
 
