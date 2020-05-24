@@ -705,7 +705,7 @@ which calls the shell again via  its execute() routine, records the next linenum
 ```
 where the other cases are defined in the macro above.  On the first call to execute(), ctx->ccrLine is defined as 0.  
 
-Re-entry also requires saving the context of the the execute(), including ctx->ccrLine, and other variables.  Prior the the first call to execeute(), ctx is defined as 1, and passed to execute().  This indicates a need to alloc a new context for ctx, and to initialize it, including initializing ctx->ccrLine to 0.  On subsequent calls, that intialized context is passed in to execute(), including the updated ctx->ccrLine.  
+Re-entry also requires saving the context of the the execute(), including ctx->ccrLine and other variables.  Prior the the first call to Shell::execute(), ctx is defined as 1 before being passed to execute().  This marks the need for the code of execute() to alloc a new context into ctx and to initialize it, including initializing ctx->ccrLine to 0, so the switch{} selects case 0.  On subsequent calls, that intialized context is re-passed into execute(), including the updated ctx->ccrLine to allow the 'switch (ctx->ccrLine)' to jump to the correct case-statement.  
 
 #### Implementing Script Groups
 Since some effects will use infinite while-blocks to produce effects on a pin, there has to be a way to stop these effects, or substitute another effect for that pin.  This is done by associating a group-variable, with a group of eventids, that keeps track of which of their scripts is active for that pin.  When another eventid in that group is received, it over-rides the cuurent script/effect by over-writting its associated group-variable.  
