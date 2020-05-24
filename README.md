@@ -163,7 +163,7 @@ M | -- ms | millis() |
 N | -- | no operation |
 O | pin -- | pinMode(pin, OUTPUT) |
 P | value pin -- | analogWrite(pin, value) |
-**Q** | Qx### | period/time literal, x = u,m,s,h,t for us, s, min, h, time
+**Q** | Qx### | period/time literal, x = u,m,h,t for us, min, h, time
 R | pin --  bool | digitalRead(pin) |
 S | -- | print stack contents | .S
 T | -- true | true | TRUE
@@ -186,7 +186,6 @@ Opcode | Parameters | Description
 **_P** | ch -- | **P**roduce the event for the channel
 **_R** | offset ch -- | Produce a **R**ange-eventid by adding offset to ch's eid
 **_r** | -- range | value in last **r**ange received
-**_S** | width -- | set **S**ervo to pulse-width, 800-2200ms
 
 ## Special forms
 
@@ -678,13 +677,34 @@ In this example, 2the two lower bits ware used to represent aspects:
  3,12_R "report proceed-aspect on channel 12"
  ```
 
-### Servos
+## Under the Hood
 
-This uses the PCA9685, such as used on the Adafruit 16-channel servo board.  
-it uses the Adafruit library.  
-Set a servo#4 to 915 ms pulse-width:
+### Changes to original Shell lib
+
+#### Yielding
+Since many scripts may be executing in (pseudo-)parallel, a script needs to yield back to the main code, so that all scripts get interpreted.  This is done by yielding at each **D**elay and each **l**oop, **w**hile, **i**f, or **e**lse blocks, using the re-entry device described below.  This allows the use of infinite whiles, for example, to appear to execute in parallel.  
+
+#### Re-entry
+To allow reentrancy, the code uses a switch-statement to allow the code to return to its previous location. Unfortunately, this meant replacing the central switch{} construct in the original Shell with if-then-else statements.  The guts of the method are contained in this macro: 
 ```
-915,4_S
+#define exec(x) \
+    ctx->sctx=(void*)1;\
+    do {\
+      if (execute(x, &(ctx->sctx)) != NULL) goto error;\
+      ctx->ccrLine = __LINE__;\
+      return(NULL);\
+  case __LINE__:;\
+    } while(ctx->sctx);
 ```
+which calls the shell again, and records the next linenumber into ctx->ccrLine, and defines a new case-statement with that line-number.  On entry to execute(), the following code uses the case-statement construct to return to the right place, if this is a re-entry call: 
+```
+        switch (ctx->ccrLine) {
+            case 0:; // first time through
+```
+where the other cases are defined in the macro above.  
+
+#### Implementing Script Groups
+Since some effects will use infinite while-blocks to produce effects on a pin, there has to be a way to stop these effects, or substitute another effect for that pin.  This is done by keeping a group-variable that keeps track of the script that is active for that pin.  When another eveitid is receivied that over-rides that script/effect, then its event# is over-written in the group-variable.  
+
 
  
