@@ -163,7 +163,7 @@ M | -- ms | millis() |
 N | -- | no operation |
 O | pin -- | pinMode(pin, OUTPUT) |
 P | value pin -- | analogWrite(pin, value) |
-**Q** | Qx### | period/time literal, x = u,m,h,t for us, min, h, time
+**Q** | Qx### | period/time literal, x = u,s,m,h,t for us, s, min, h, time
 R | pin --  bool | digitalRead(pin) |
 S | -- | print stack contents | .S
 T | -- true | true | TRUE
@@ -248,10 +248,10 @@ Binary literal numbers are prefixed with `0b`, and hexadecimal with
 Unit | Value Range | Time Range |Note 
 -------|:----------|:--------------|:---------
  ms | 0-9,999 | 0ms-9,999ms / 9.999s | for compatibiliy
- us | 10,000-19,999 | 0us-9,999us / 9.999ms 
- sec | 20,000-29,999 | 0s-9,999s / 167min / 2.78h 
- min | 30,000-39,999 | 0min-9,999min / 167h / 7d 
- hour | 40,000-49,999 | 0h-9,999h / 416d / 1year 
+ us | 10,000-19,999 | 0us-9,999us or 9.999ms 
+ sec | 20,000-29,999 | 0s-9,999s or 167min or 2.78h 
+ min | 30,000-39,999 | 0min-9,999min or 167h or 7d 
+ hour | 40,000-49,999 | 0h-9,999h or 416d or 1year 
  time | 50,000-64400 | 00:00.0-23:59.9 
  
  **Note: be careful with comparisons.**  
@@ -682,10 +682,12 @@ In this example, 2the two lower bits ware used to represent aspects:
 ### Changes to original Shell lib
 
 #### Yielding
-Since many scripts may be executing in (pseudo-)parallel, a script needs to yield back to the main code, so that all scripts get interpreted.  This is done by yielding at each **D**elay and each **l**oop, **w**hile, **i**f, or **e**lse blocks, using the re-entry device described below.  This allows the use of infinite whiles, for example, to appear to execute in parallel.  
+Since many scripts may be executing in (pseudo-)parallel, a script needs to be able to yield back to the main code, so that all scripts are able to be interpreted.  This is done by yielding at each **D**elay, and each **l**oop, **w**hile, **i**f, or **e**lse block, using the re-entry device described below.  For example, this enables the use of infinite whiles-blocks to appear to execute in parallel.  
 
 #### Re-entry
-To allow reentrancy, the code uses a switch-statement to allow the code to return to its previous location. Unfortunately, this meant replacing the central switch{} construct in the original Shell with if-then-else statements.  The guts of the method are contained in this macro: 
+To allow reentrancy, the code uses a switch-statement construct to allow the code to return to its previous location. Unfortunately, this required replacing the central switch{} construct of the original Shell with if-then-else statements.  
+
+The guts of the method are contained in this macro: 
 ```
 #define exec(x) \
     ctx->sctx=(void*)1;\
@@ -696,15 +698,17 @@ To allow reentrancy, the code uses a switch-statement to allow the code to retur
   case __LINE__:;\
     } while(ctx->sctx);
 ```
-which calls the shell again, and records the next linenumber into ctx->ccrLine, and defines a new case-statement with that line-number.  On entry to execute(), the following code uses the case-statement construct to return to the right place, if this is a re-entry call: 
+which calls the shell again via  its execute() routine, records the next linenumber into ctx->ccrLine, and defines a new case-statement with that line-number as its label.  On entry to execute(), the following code uses the case-statement construct to return to the previous location in code, if this is a re-entry call: 
 ```
         switch (ctx->ccrLine) {
             case 0:; // first time through
 ```
-where the other cases are defined in the macro above.  
+where the other cases are defined in the macro above.  On the first call to execute(), ctx->ccrLine is defined as 0.  
+
+Re-entry also requires saving the context of the the execute(), including ctx->ccrLine, and other variables.  Prior the the first call to execeute(), ctx is defined as 1, and passed to execute().  This indicates a need to alloc a new context for ctx, and to initialize it, including initializing ctx->ccrLine to 0.  On subsequent calls, that intialized context is passed in to execute(), including the updated ctx->ccrLine.  
 
 #### Implementing Script Groups
-Since some effects will use infinite while-blocks to produce effects on a pin, there has to be a way to stop these effects, or substitute another effect for that pin.  This is done by keeping a group-variable that keeps track of the script that is active for that pin.  When another eveitid is receivied that over-rides that script/effect, then its event# is over-written in the group-variable.  
+Since some effects will use infinite while-blocks to produce effects on a pin, there has to be a way to stop these effects, or substitute another effect for that pin.  This is done by associating a group-variable, with a group of eventids, that keeps track of which of their scripts is active for that pin.  When another eventid in that group is received, it over-rides the cuurent script/effect by over-writting its associated group-variable.  
 
 
  
