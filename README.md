@@ -17,8 +17,6 @@ possible to write small scripts directly without a token compiler. As
 Forth scripts are written in Reverse Polish Notation (RPN), and
 executed in the given order.
 
-![screenshot](https://dl.dropboxusercontent.com/u/993383/Cosa/screenshots/Screenshot%20from%202016-02-26%2015%3A15%3A48.png)
-
 Shell has built-in instruction level trace to aid script debugging and
 performance tuning. It prints the instruction cycle count, script
 address, opcode (or full operation name), stack depth and
@@ -708,7 +706,7 @@ where the other cases are defined in the macro above.  On the first call to exec
 Re-entry also requires saving the context of the the execute(), including ctx->ccrLine and other variables.  Prior the the first call to Shell::execute(), ctx is defined as 1 before being passed to execute().  This marks the need for the code of execute() to alloc a new context into ctx and to initialize it, including initializing ctx->ccrLine to 0, so the switch{} selects case 0.  On subsequent calls, that intialized context is re-passed into execute(), including the updated ctx->ccrLine to allow the 'switch (ctx->ccrLine)' to jump to the correct case-statement.  
 
 #### Implementing Script Groups
-Since some effects will use infinite while-blocks to produce effects on a pin, there has to be a way to stop these effects, or substitute another effect for that pin.  This is done by associating a group-variable, with a group of eventids, that keeps track of which of their scripts is active for that pin.  When another eventid in that group is received, it over-rides the cuurent script/effect by over-writting its associated group-variable.  
+Since some effects will use infinite while-blocks to produce effects on a pin, there has to be a way to stop these effects, or substitute another effect for that pin.  This is done by associating a group-variable, with a group of eventids, that keeps track of which of their scripts is active for that pin.  When another eventid in that group is received, it overrides the current script/effect value its associated group-variable.  
 
 
  
