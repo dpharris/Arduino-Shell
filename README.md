@@ -685,7 +685,7 @@ Since many scripts may be executing in (pseudo-)parallel, a script needs to be a
 #### Re-entry
 To allow reentrancy, the code uses a switch-statement construct to allow the code to return to its previous location. Unfortunately, this required replacing the central switch{} construct of the original Shell with if-then-else statements.  
 
-The guts of the method are contained in this macro: 
+The guts of the method are contained in this macro, which is called whereever the code is to yield, and then carry on on return: 
 ```
 #define exec(x) \
     ctx->sctx=(void*)1;\
@@ -696,7 +696,7 @@ The guts of the method are contained in this macro:
   case __LINE__:;\
     } while(ctx->sctx);
 ```
-which calls the shell again via  its execute() routine, records the next linenumber into ctx->ccrLine, and defines a new case-statement with that line-number as its label.  On entry to execute(), the following code uses the case-statement construct to return to the previous location in code, if this is a re-entry call: 
+which intitializes a new context to 1, calls the shell again via its execute() routine, records the next linenumber into ctx->ccrLine, and defines a new case-statement with that line-number as its label.  On an entry to execute(), the following code uses the case-statement to return to the previous location in code, if this is a re-entry call: 
 ```
         switch (ctx->ccrLine) {
             case 0:; // first time through
