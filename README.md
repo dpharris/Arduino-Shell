@@ -680,12 +680,12 @@ In this example, 2the two lower bits ware used to represent aspects:
 ### Changes to original Shell lib
 
 #### Yielding
-Since many scripts may be executing in (pseudo-)parallel, a script needs to be able to yield back to the main code, so that all scripts are able to be interpreted.  This is done by yielding at each **D**elay, and each **l**oop, **w**hile, **i**f, or **e**lse block, using the re-entry device described below.  For example, this enables the use of infinite whiles-blocks to appear to execute in parallel.  
+Since many scripts may be executing in (pseudo-)parallel, a script needs to be able to yield back to the main code, so that each script is able to be interpreted.  This is done by yielding at each **D**elay, and at each **l**oop, **w**hile, **i**f, or **e**lse block, using the re-entry code described below.  
 
 #### Re-entry
-To allow reentrancy, the code uses a switch-statement construct to allow the code to return to its previous location. Unfortunately, this required replacing the central switch{} construct of the original Shell with if-then-else statements.  
+To allow reentrancy, a switch-statement construct is used to allow the code to return to its previous location in the code. Since this ues a switch{}, the original central switch{} construct of the original Shell had to be replaced with if-then-else statements.  
 
-The guts of the method are contained in this macro, which is called whereever the code is to yield, and then carry on on return: 
+The guts of the reentry method are contained in the following macro, which is called whereever the code needs to yield, and then to carry on when the code is reentered: 
 ```
 #define exec(x) \
     ctx->sctx=(void*)1;\
@@ -696,14 +696,29 @@ The guts of the method are contained in this macro, which is called whereever th
   case __LINE__:;\
     } while(ctx->sctx);
 ```
-which intitializes a new context to 1, calls the shell again via its execute() routine, records the next linenumber into ctx->ccrLine, and defines a new case-statement with that line-number as its label.  On an entry to execute(), the following code uses the case-statement to return to the previous location in code, if this is a re-entry call: 
+which intitializes a new context to 1, calls the shell again via its execute() routine, records the next linenumber into ctx->ccrLine, and defines a new case-statement with that line-number as its label.  The macro is used for example: 
+```
+   } else if (ctx->op == 'w') {    // block( -- flag) -- | execute block while
+     ctx->sp = (const char*) pop();
+     do {
+       exec(ctx->sp);
+     } while (pop());
+     continue;
+```
+
+On entry to, or reentry to, execute() the following code uses the switch-statement to case 0 on the first entry, or to return control to the previous location in the code if this is a re-entry call: 
 ```
         switch (ctx->ccrLine) {
             case 0:; // first time through
+        ...
+            case 716:;     // auto-generated in exec() macro
+        ...
+            case 1123:;    // auto-generated in exec() macro
+        ...
 ```
 where the other cases are defined in the macro above.  On the first call to execute(), ctx->ccrLine is defined as 0.  
 
-Re-entry also requires saving the context of the the execute(), including ctx->ccrLine and other variables.  Prior the the first call to Shell::execute(), ctx is defined as 1 before being passed to execute().  This marks the need for the code of execute() to alloc a new context into ctx and to initialize it, including initializing ctx->ccrLine to 0, so the switch{} selects case 0.  On subsequent calls, that intialized context is re-passed into execute(), including the updated ctx->ccrLine to allow the 'switch (ctx->ccrLine)' to jump to the correct case-statement.  
+Re-entry also requires saving the context of the execute(), including ctx->ccrLine and other variables.  Prior the the first call to Shell::execute(), ctx is defined as 1 and passed to execute().  This marks the need for the code of execute() to alloc a new context into ctx, and to initialize it, including initializing ctx->ccrLine to 0, as mentioned above, so that the 'switch (ctx->ccrLine)' selects case 0.  On subsequent calls, that intialized context is re-passed into execute(), including the updated ctx->ccrLine to allow the 'switch (ctx->ccrLine)' to jump to the correct case-statement.  
 
 #### Implementing Script Groups
 Since some effects will use infinite while-blocks to produce effects on a pin, there has to be a way to stop these effects, or substitute another effect for that pin.  This is done by associating a group-variable, with a group of eventids, that keeps track of which of their scripts is active for that pin.  When another eventid in that group is received, it overrides the current script/effect value its associated group-variable.  
