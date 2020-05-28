@@ -696,7 +696,7 @@ The guts of the reentry method are contained in the following macro, which is ca
   case __LINE__:;\
     } while(ctx->sctx);
 ```
-which intitializes a new context to 1, calls the shell again via its execute() routine, records the next linenumber into ctx->ccrLine, and defines a new case-statement with that line-number as its label.  The macro is used for example: 
+which intitializes a new context to 1, calls the shell again via its execute() routine, records the next linenumber into ctx->ccrLine, and defines a new case-statement with that line-number as its label.  The macro is used for example in the 'while' code: 
 ```
    } else if (ctx->op == 'w') {    // block( -- flag) -- | execute block while
      ctx->sp = (const char*) pop();
@@ -708,13 +708,13 @@ which intitializes a new context to 1, calls the shell again via its execute() r
 
 On entry to, or reentry to, execute() the following code uses the switch-statement to case 0 on the first entry, or to return control to the previous location in the code if this is a re-entry call: 
 ```
-        switch (ctx->ccrLine) {
-            case 0:; // first time through
-        ...
-            case 716:;     // auto-generated in exec() macro
-        ...
-            case 1123:;    // auto-generated in exec() macro
-        ...
+   switch (ctx->ccrLine) {
+     case 0:; // first time through
+   ...
+     case 716:;     // auto-generated in exec() macro
+   ...
+     case 1123:;    // auto-generated in exec() macro
+   ...
 ```
 where the other cases are defined in the macro above.  On the first call to execute(), ctx->ccrLine is defined as 0.  
 
