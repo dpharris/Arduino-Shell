@@ -184,6 +184,13 @@ Opcode | Parameters | Description
 **_P** | ch -- | **P**roduce the event for the channel
 **_R** | offset ch -- | Produce a **R**ange-eventid by adding offset to ch's eid
 **_r** | -- range | value in last **r**ange received
+**_E** | -- | print the script definitions in eeprom
+**_Y** | n -- | print the script associated with eventid-n
+**_Y** | 0 -- | print all scripts associated with eventids
+**_Z** | n -- | write a block to the script associated with eventid-n
+**_G** | group n -- | assign group to the script associated with eventid-n
+**_F** | -- mem | print free-memory value
+**_!** | -- | stop all active scripts
 
 ## Special forms
 
@@ -680,12 +687,22 @@ In this example, 2the two lower bits ware used to represent aspects:
 ### Changes to original Shell lib
 
 #### Yielding
-Since many scripts may be executing in (pseudo-)parallel, a script needs to be able to yield back to the main code, so that each script is able to be interpreted.  This is done by yielding at each **D**elay, and at each **l**oop, **w**hile, **i**f, or **e**lse block, using the re-entry code described below.  
+Since scripts are executed in (pseudo-)parallel, each script needs to be able to yield back to the main code to allow the other scripts to be executed.  This is done automatically by yielding at each **D**elay and at each **l**oop, **w**hile, **i**f, or **e**lse block, using the re-entry code described below which returns the active context and location in the code. 
 
 #### Re-entry
-To allow reentrancy, a switch-statement construct is used to allow the code to return to its previous location in the code. Since this ues a switch{}, the original central switch{} construct of the original Shell had to be replaced with if-then-else statements.  
+Each script uses the same execute() code, and therefore execute() needs to be re-entrant.  To allow this, a context is maintained and a switch-statement is used to return to its previous location in the code.  Since the original shell-code used a switch statement, this was replaced with if-then-else statements.  
 
-The guts of the reentry method are contained in the following macro, which is called whereever the code needs to yield, and then to carry on when the code is reentered: 
+The guts of the re-entry method are contained in the following macro, which is called where-ever the code needs to yield, and saves its context for the next re-entry.  The macro is used for example in the 'while' code: 
+```
+   } else if (ctx->op == 'w') {    // block( -- flag) -- | execute block while
+     ctx->sp = (const char*) pop();
+     do {
+       exec(ctx->sp);
+     } while (pop());
+     continue;
+```
+
+The macro is;
 ```
 #define exec(x) \
     ctx->sctx=(void*)1;\
@@ -696,17 +713,9 @@ The guts of the reentry method are contained in the following macro, which is ca
   case __LINE__:;\
     } while(ctx->sctx);
 ```
-which intitializes a new context to 1, calls the shell again via its execute() routine, records the next linenumber into ctx->ccrLine, and defines a new case-statement with that line-number as its label.  The macro is used for example in the 'while' code: 
-```
-   } else if (ctx->op == 'w') {    // block( -- flag) -- | execute block while
-     ctx->sp = (const char*) pop();
-     do {
-       exec(ctx->sp);
-     } while (pop());
-     continue;
-```
+This intitializes a new context to the valuse 1, calls the shell with this new context via its execute() routine, records the next linenumber into ctx->ccrLine, and defines a new case-statement with that line-number as its label.  
 
-On entry to, or reentry to, execute() the following code uses the switch-statement to case 0 on the first entry, or to return control to the previous location in the code if this is a re-entry call: 
+On entry to, or reentry to, the execute() routine, the following code uses the switch-statement to switch to the approprite case.  On first entry, it switches to case 0.  On a re-entrant call, control switched the case-statememt previously saved in the exec() macro above.  The code looks like this:
 ```
    switch (ctx->ccrLine) {
      case 0:; // first time through
@@ -716,9 +725,7 @@ On entry to, or reentry to, execute() the following code uses the switch-stateme
      case 1123:;    // auto-generated in exec() macro
    ...
 ```
-where the other cases are defined in the macro above.  On the first call to execute(), ctx->ccrLine is defined as 0.  
-
-Re-entry also requires saving the context of the execute(), including ctx->ccrLine and other variables.  Prior the the first call to Shell::execute(), ctx is defined as 1 and passed to execute().  This marks the need for the code of execute() to alloc a new context into ctx, and to initialize it, including initializing ctx->ccrLine to 0, as mentioned above, so that the 'switch (ctx->ccrLine)' selects case 0.  On subsequent calls, that intialized context is re-passed into execute(), including the updated ctx->ccrLine to allow the 'switch (ctx->ccrLine)' to jump to the correct case-statement.  
+Where the other cases, such as 716 qnd 1123, are defined in the macro above.  NOte that on the first call to execute(), ctx->ccrLine is defined as 1.  This marks the need for the code of execute() to alloc a new context into ctx, and to initialize it, including initializing ctx->ccrLine to 0, as mentioned above, so that the 'switch (ctx->ccrLine)' selects case 0.  On subsequent calls, that intialized context is re-passed into execute(), including the updated ctx->ccrLine to allow the 'switch (ctx->ccrLine)' to jump to the correct case-statement.  
 
 #### Implementing Script Groups
 Since some effects will use infinite while-blocks to produce effects on a pin, there has to be a way to stop these effects, or substitute another effect for that pin.  This is done by associating a group-variable, with a group of eventids, that keeps track of which of their scripts is active for that pin.  When another eventid in that group is received, it overrides the current script/effect value its associated group-variable.  
