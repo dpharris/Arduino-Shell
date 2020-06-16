@@ -184,12 +184,12 @@ Opcode | Parameters | Description
 **_P** | ch -- | **P**roduce the event for the channel
 **_R** | offset ch -- | Produce a **R**ange-eventid by adding offset to ch's eid
 **_r** | -- range | value in last **r**ange received
-**_E** | -- | print the script definitions in eeprom
+**_E** | -- | print the script definitions in **E**eprom
 **_Y** | n -- | print the script associated with eventid-n
 **_Y** | 0 -- | print all scripts associated with eventids
 **_Z** | n -- | write a block to the script associated with eventid-n
-**_G** | group n -- | assign group to the script associated with eventid-n
-**_F** | -- mem | print free-memory value
+**_G** | group n -- | assign **G**roup to the script associated with eventid-n
+**_M** | -- mem | print free-**M**emory value
 **_!** | -- | stop all active scripts
 
 ## Special forms
