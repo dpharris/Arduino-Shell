@@ -177,8 +177,8 @@ Opcode | Parameters | Description
 -------|:-----------|:------------
 **_c** | -- ch | current **c**hannel
 **_p** | ch -- pin# | **p**in associated with this channel
-**_I** | data n addr -- | **I**2C write: Wire.write(addr,n,data)
-**_i** | data n addr -- data n | **i**2c write with reply: Wire.read(addr,n,&data)
+**_I** | data n addr -- | **I**2C write: Wire.send(addr,n,data)
+**_i** | data n addr -- data n | **i**2c send with reply: Wire.requestFrom(addr, n, data)
 **_j** | -- data n addr | **j**2c async read: Wire.onreceive(addr,n,&data)
 **_F** | -- fastclock | returns **F**astClock value
 **_T** | -- realtime  | returns Real**T**imeClock value
