@@ -253,11 +253,11 @@ Binary literal numbers are prefixed with `0b`, and hexadecimal with
 
 Unit | Value Range | Time Range |Note 
 -------|:----------|:--------------|:---------
- ms | 0-9,999 | 0ms-9,999ms / 9.999s | for compatibiliy
- us | 10,000-19,999 | 0us-9,999us or 9.999ms 
- sec | 20,000-29,999 | 0s-9,999s or 167min or 2.78h 
- min | 30,000-39,999 | 0min-9,999min or 167h or 7d 
- hour | 40,000-49,999 | 0h-9,999h or 416d or 1year 
+ ms | 0-9,999 | 0ms-9,999ms, ie 0-9.999s | for compatibiliy
+ us | 10,000-19,999 | 0us-9,999us or 0-9.999ms 
+ sec | 20,000-29,999 | 0s-9,999s or 0-167min or 0-2.78h 
+ min | 30,000-39,999 | 0min-9,999min or 0-167h or 0-7d 
+ hour | 40,000-49,999 | 0h-9,999h or 0-416d or 0-1year 
  time | 50,000-64400 | 00:00.0-23:59.9 
  
  **Note: be careful with comparisons.**  
