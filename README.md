@@ -198,7 +198,7 @@ Opcode | Parameters | Description
 The shell script language allows several special forms such as literal
 values, blocks, control structures and argument frames.
 
-### Comments
+### Comments (extension)
 **Comments are indicated by surrounding them with "'s, eg "a comment".
 They are skipped over in the scanning.  Do _not_ place them inside code 
 defintions, as that will slow down interpretation.  Rather, leave 
@@ -651,7 +651,7 @@ Print "Bong" at noon, real-time, once:
  { Qt12_T= u{ (Bong)m }i ~}w
 ```
 
-### I2C
+### I2C (subject to change)
 
 Send to MCP23017 I/O Expander, addressed as 0x40:
 ```
@@ -668,7 +668,7 @@ _r and _R let you use eventid-ranges.  One of the eventids will be set with
 n-zero bits, and indicated in the 'range' field in the event by inserting the 
 number of bits to be used.  
 
-In this example, 2the two lower bits ware used to represent aspects: 
+In this example, the two lower bits are used to represent aspects: 
  * 0 = Stop
  * 1 = Caution
  * 2 = Advanced caution
@@ -729,7 +729,7 @@ On entry to, or reentry to, the execute() routine, the following code uses the s
 Where the other cases, such as 716 qnd 1123, are defined in the macro above.  NOte that on the first call to execute(), ctx->ccrLine is defined as 1.  This marks the need for the code of execute() to alloc a new context into ctx, and to initialize it, including initializing ctx->ccrLine to 0, as mentioned above, so that the 'switch (ctx->ccrLine)' selects case 0.  On subsequent calls, that intialized context is re-passed into execute(), including the updated ctx->ccrLine to allow the 'switch (ctx->ccrLine)' to jump to the correct case-statement.  
 
 #### Implementing Script Groups
-Since some effects will use infinite while-blocks to produce effects on a pin, there has to be a way to stop these effects, or substitute another effect for that pin.  This is done by associating a group-variable, with a group of eventids, that keeps track of which of their scripts is active for that pin.  When another eventid in that group is received, it overrides the current script/effect value its associated group-variable.  
+Since some effects will use infinite while-blocks to produce effects on a pin, there has to be a way to stop these effects, or substitute another effect for that pin.  This is done by associating a group-variable, with a group of eventids, that keeps track of which of their associated scripts is active for that pin.  When another eventid in that group is received, it overrides the current script/effect value in its associated group-variable.  
 
 
  
