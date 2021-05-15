@@ -617,7 +617,7 @@ Script:
 
 Query bit #6 from reg, and report:
 ```
- :reg@ 6B & (bit6 is ) {present)m }{ (absent)m }e
+ : reg@ 6B & (bit6 is ) { (present)m }{ (absent)m }e
 ```
  
 ### Random
