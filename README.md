@@ -617,7 +617,7 @@ Script:
 
 Query bit #6 from reg, and report:
 ```
- :reg@ 6B & { (Present)m }{ (Absent)m }e
+ :reg@ 6B & (bit6 is ) {present)m }{ (absent)m }e
 ```
  
 ### Random
@@ -627,8 +627,8 @@ Roll a dice, and report:
  6V u2={(Three)}i u0={(One)}i u1={(Two)}i u3={(Four)}i u4={(Five)}i 5={(Six)}i
    "Mimics a case-statement, but no default-case."
  or
- [ {(Six)}, {(Five)}, {(Four)}, {(Three)}, {(Two)}, {(One)} ] V1+px ddddd
-   "Leaves six blocks on stack, picks a random one and executes it, drops the others"
+ [ {(Six)}, {(Five)}, {(Four)}, {(Three)}, {(Two)}, {(One)} ] 6V1+px dddddd
+   "Leaves six blocks on stack, picks a random one and executes it, drops the original blocks"
    "Mimics a (seqential) case-statement."
 ```
 
