@@ -728,7 +728,7 @@ On entry to, or reentry to, the execute() routine, the code below uses the switc
      case 1123:;    // auto-generated in another exec() macro
    ...
 ```
-Where the other cases, such as 716 qnd 1123, are defined in the macro above.  Note that on the first call to execute(), ctx->ccrLine is defined as 1.  This indicates the need for execute() to alloc a new context into ctx and to initialize it, including initializing ctx->ccrLine to 0, as mentioned above, so that the 'switch (ctx->ccrLine)' selects case 0.  On subsequent calls, that intialized context is re-passed into execute(), including the updated ctx->ccrLine to allow the 'switch (ctx->ccrLine)' to jump to the correct case-statement.  
+Where the other cases, such as 716 qnd 1123, are defined in the exec() macro above.  Note that on the first call to execute(), ctx->ccrLine is defined as 1.  This indicates the need for execute() to alloc a new context into ctx and to initialize it, including initializing ctx->ccrLine to 0, as mentioned above, so that the 'switch (ctx->ccrLine)' selects case 0.  On subsequent calls, that intialized context is re-passed into execute(), including the updated ctx->ccrLine to allow the 'switch (ctx->ccrLine)' to jump to the correct case-statement.  
 
 #### Implementing Script Groups
 Since some effects will use infinite while-blocks to produce effects on a pin, there has to be a way to stop these effects, or substitute another effect for that pin.  This is done by associating a group-variable, with a group of eventids, that keeps track of which of their associated scripts is active for that pin.  When another eventid in that group is received, it overrides the current script/effect value in its associated group-variable.  
