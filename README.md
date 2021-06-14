@@ -690,7 +690,7 @@ In this example, the two lower bits are used to represent aspects:
 The Shell was extended so that several scripts could be operating to implement effects on multiple pins in (pseudo-) parallel.  For example, one pin might be flashing, while another fades.  This modification allows these scripts to execute independently to achieve their effects.  
 
 #### Yielding
-Since scripts are executed in (pseudo-)parallel, each script needs to be able to yield back to the main code to allow the other scripts to be executed.  This is done automatically by yielding at each **D**elay and at each **l**oop, **w**hile, **i**f, or **e**lse block, using the re-entry code described below which returns the active context and location in the code. 
+Since scripts are executed in (pseudo-)parallel, each script needs to be able to yield back to the main code to allow the other scripts to be executed.  This is done automatically by yielding at each **Delay**, and at each **loop**, **while**, **if**, or **else** block, using the re-entry code described below which returns the active context and location in the code. 
 
 #### Re-entry
 Each script uses the same execute() code, and therefore execute() needs to be re-entrant.  To allow this, a context is maintained and a switch-statement is used to return to its previous location in the code.  Since the original shell-code used a switch statement, this was replaced with if-then-else statements.  
