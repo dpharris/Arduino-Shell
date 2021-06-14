@@ -693,9 +693,9 @@ The Shell was extended so that several scripts could be operating to implement e
 Since scripts are executed in (pseudo-)parallel, each script needs to be able to yield back to the main code to allow the other scripts to be executed.  This is done automatically by yielding at each **Delay**, and at each **loop**, **while**, **if**, or **else** block, using the re-entry code described below which returns the active context and location in the code. 
 
 #### Re-entry
-Each script uses the same execute() code, and therefore execute() needs to be re-entrant.  To allow this, a context is maintained and a switch-statement is used to return to its previous location in the code.  Since the original shell-code used a switch statement, this was replaced with if-then-else statements.  
+Since each script uses the same execute() code, execute() **must** to be re-entrant.  To allow this, a context (ctx) is maintained across activations and a switch-statement is used to return that activation to its previous location in the code.  Since the original shell-code also used a switch statement, which disrupted this method, the original Shell switch statement was replaced with if-then-else statements.  Formatting was used to try to maintain the same feel to the code.  
 
-The guts of the re-entry method are contained in the following macro **exec()**, which is called whereever the code needs to yield, and saves its context for the next re-entry.  The macro is used for example in the 'while' code: 
+The guts of the re-entry method are contained in the following macro, **exec()**, which is called where ever the code needs to yield, and it saves its context into ctx for its next activation.  Here the exec() macro is used, as an example, in the 'while' code: 
 ```
    } else if (ctx->op == 'w') {    // block( -- flag) -- | execute block while
      ctx->sp = (const char*) pop();
@@ -716,16 +716,16 @@ The macro is;
   case __LINE__:;\
     } while(ctx->sctx);
 ```
-This intitializes a new context to the value 1, calls the shell with this new context via its execute() routine, records the next linenumber into ctx->ccrLine, and defines a new case-statement with that line-number as its label.  
+When called this intitializes a new context to the value 1, calls the shell with this new context via the execute() routine, records the following linenumber into ctx->ccrLine, and defines a new case-statement with that same line-number as its label, so that the switch statementcan return ecexution there.  
 
-On entry to, or reentry to, the execute() routine, the following code uses the switch-statement to switch to the approprite case.  On first entry, it switches to case 0.  On a re-entrant call, control switched the case-statememt previously saved in the exec() macro above.  The code looks like this:
+On entry to, or reentry to, the execute() routine, the code below uses the switch-statement to select the approprite case-statement.  On the first entry, it switches to case 0, while a re-entrant call selects the case-statememt previously saved in the ctx by the exec() macro above.  The code looks like this:
 ```
    switch (ctx->ccrLine) {
      case 0:; // first time through
    ...
-     case 716:;     // auto-generated in exec() macro
+     case 716:;     // auto-generated in an exec() macro
    ...
-     case 1123:;    // auto-generated in exec() macro
+     case 1123:;    // auto-generated in another exec() macro
    ...
 ```
 Where the other cases, such as 716 qnd 1123, are defined in the macro above.  Note that on the first call to execute(), ctx->ccrLine is defined as 1.  This indicates the need for execute() to alloc a new context into ctx and to initialize it, including initializing ctx->ccrLine to 0, as mentioned above, so that the 'switch (ctx->ccrLine)' selects case 0.  On subsequent calls, that intialized context is re-passed into execute(), including the updated ctx->ccrLine to allow the 'switch (ctx->ccrLine)' to jump to the correct case-statement.  
