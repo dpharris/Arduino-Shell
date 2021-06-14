@@ -687,18 +687,20 @@ In this example, the two lower bits are used to represent aspects:
 
 ### Changes to original Shell lib
 
+The Shell was extended so that several scripts could be operating to implement effects on multiple pins in (pseudo-) parallel.  For example, one pin might be flashing, while another fades.  This modification allows these scripts to execute independently to achieve their effects.  
+
 #### Yielding
 Since scripts are executed in (pseudo-)parallel, each script needs to be able to yield back to the main code to allow the other scripts to be executed.  This is done automatically by yielding at each **D**elay and at each **l**oop, **w**hile, **i**f, or **e**lse block, using the re-entry code described below which returns the active context and location in the code. 
 
 #### Re-entry
 Each script uses the same execute() code, and therefore execute() needs to be re-entrant.  To allow this, a context is maintained and a switch-statement is used to return to its previous location in the code.  Since the original shell-code used a switch statement, this was replaced with if-then-else statements.  
 
-The guts of the re-entry method are contained in the following macro, which is called where-ever the code needs to yield, and saves its context for the next re-entry.  The macro is used for example in the 'while' code: 
+The guts of the re-entry method are contained in the following macro **exec()**, which is called whereever the code needs to yield, and saves its context for the next re-entry.  The macro is used for example in the 'while' code: 
 ```
    } else if (ctx->op == 'w') {    // block( -- flag) -- | execute block while
      ctx->sp = (const char*) pop();
      do {
-       exec(ctx->sp);
+       **exec(ctx->sp);**
      } while (pop());
      continue;
 ```
@@ -714,7 +716,7 @@ The macro is;
   case __LINE__:;\
     } while(ctx->sctx);
 ```
-This intitializes a new context to the valuse 1, calls the shell with this new context via its execute() routine, records the next linenumber into ctx->ccrLine, and defines a new case-statement with that line-number as its label.  
+This intitializes a new context to the value 1, calls the shell with this new context via its execute() routine, records the next linenumber into ctx->ccrLine, and defines a new case-statement with that line-number as its label.  
 
 On entry to, or reentry to, the execute() routine, the following code uses the switch-statement to switch to the approprite case.  On first entry, it switches to case 0.  On a re-entrant call, control switched the case-statememt previously saved in the exec() macro above.  The code looks like this:
 ```
@@ -726,7 +728,7 @@ On entry to, or reentry to, the execute() routine, the following code uses the s
      case 1123:;    // auto-generated in exec() macro
    ...
 ```
-Where the other cases, such as 716 qnd 1123, are defined in the macro above.  NOte that on the first call to execute(), ctx->ccrLine is defined as 1.  This marks the need for the code of execute() to alloc a new context into ctx, and to initialize it, including initializing ctx->ccrLine to 0, as mentioned above, so that the 'switch (ctx->ccrLine)' selects case 0.  On subsequent calls, that intialized context is re-passed into execute(), including the updated ctx->ccrLine to allow the 'switch (ctx->ccrLine)' to jump to the correct case-statement.  
+Where the other cases, such as 716 qnd 1123, are defined in the macro above.  Note that on the first call to execute(), ctx->ccrLine is defined as 1.  This indicates the need for execute() to alloc a new context into ctx and to initialize it, including initializing ctx->ccrLine to 0, as mentioned above, so that the 'switch (ctx->ccrLine)' selects case 0.  On subsequent calls, that intialized context is re-passed into execute(), including the updated ctx->ccrLine to allow the 'switch (ctx->ccrLine)' to jump to the correct case-statement.  
 
 #### Implementing Script Groups
 Since some effects will use infinite while-blocks to produce effects on a pin, there has to be a way to stop these effects, or substitute another effect for that pin.  This is done by associating a group-variable, with a group of eventids, that keeps track of which of their associated scripts is active for that pin.  When another eventid in that group is received, it overrides the current script/effect value in its associated group-variable.  
