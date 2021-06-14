@@ -148,7 +148,7 @@ x | block -- | execute block | EXECUTE
 y | -- | yield for multi-tasking scheduler |
 z | addr -- | write variable to eeprom memory |
 A | pin -- sample | analogRead(pin) |
-**B** | bit# -- bitmask | bitmask(bit) |
+**B** | **bit# -- bitmask** | **bitmask(bit)** |
 C | xn..x1 -- | clear | ABORT
 D | ms -- | delay |
 E | period addr -- bool | check if timer variable has expired |
@@ -161,12 +161,12 @@ M | -- ms | millis() |
 N | -- | no operation |
 O | pin -- | pinMode(pin, OUTPUT) |
 P | value pin -- | analogWrite(pin, value) |
-**Q** | Qx### | period/time literal, x = u,s,m,h,t for us, s, min, h, time
+**Q** | **Qx###** | **period/time literal, x = u,s,m,h,t for us, s, min, h, time** |
 R | pin --  bool | digitalRead(pin) |
 S | -- | print stack contents | .S
 T | -- true | true | TRUE
 U | pin -- | pinMode(pin, INPUT_PULLUP) |
-**V** | range -- random | random(range) |
+**V** | **range -- random** | **random(range)** |
 W | value pin -- | digitalWrite(pin, value) |
 X | pin -- | digitalToggle(pin)  |
 Y | -- | list **words** | WORDS
