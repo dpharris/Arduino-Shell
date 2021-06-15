@@ -710,23 +710,24 @@ On the first entry, it switches to case 0, while a re-entrant call selects the c
 The macro is;
 ```
 #define exec(x) \
-    ctx->sctx=(void*)1;\                                  
+    ctx->sctx=(void*)1;\                                   // create new context with value = 1
     do {\                                                 
-      if (execute(x, &(ctx->sctx)) != NULL) goto error;\   
-      ctx->ccrLine = __LINE__;\
-      return(NULL);\
-  case __LINE__:;\                                          // generate the case-statement with the line-number
-    } while(ctx->sctx);
+      if (execute(x, &(ctx->sctx)) != NULL) goto error;\   // call execute, and test result
+      ctx->ccrLine = __LINE__;\                            // remember next line-number
+      return(NULL);\                                       // return success
+  case __LINE__:;\                                         // generate the case-statement with the line-number
+    } while(ctx->sctx);                                    // repeat the code if block has not indicated it is finished
 ```
-When called, the macro intitializes a new context to the value 1, calls the shell with this new context via the execute() routine, records the following linenumber into ctx->ccrLine, and defines a new case-statement with that same line-number as its label, so that the switch statementcan return ecexution there.  
+When called, the macro intitializes a new context to the value 1, calls the shell with this new context via the execute() routine, records the following linenumber into ctx->ccrLine, and defines a new case-statement with that same line-number as its label, so that the switch statement can return execution there.  
 
-As an example, the exec() macro is used in the 'while' code: '{ block-code while-value }w'
+As an example, the exec() macro is used in the 'while' code: '{ block-code flag }w'
 ```
-   } else if (ctx->op == 'w') {        // block( -- flag) -- | execute block while
+   } else if (ctx->op == 'w') {        // { block-code flag } -- | execute block while
      ctx->sp = (const char*) pop();    // pops the stack-pointer, and stores it into ctx
      do {                              // the body of the while-loop
-       **exec(ctx->sp);**              // execute the block-code once, then yield, remembering the next line-number for the next activation
-     } while (pop());                  // test the while-value
+       exec(ctx->sp);                  // execute the block-code once, then yield, remembering
+                                       //    the next line-number for the next activation.
+     } while (pop());                  // test the flag, and continue while-loop if true
      continue;
 ```
 
