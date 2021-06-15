@@ -738,10 +738,12 @@ As an example, the exec() macro is used in the 'while' code: '{ block-code }w'
 Since some effects will use infinite while-blocks to produce effects on a pin, there has to be a way to stop these effects, or substitute another effect for that pin.  This is done by assigning a group-variable-umber to a set of eventids.  The group-variable indicates which of its associated scripts is active.  When another eventid in that group is received, it overwrites its id into that group-variable.  
 
 For example:
-  eventid     group#   script
-  xxxxx10       5      ```13_p`off```
-  xxxxx12       5      ```13_p`flash```
-  xxxxx57       5      ```13_p`on```
-
+```
+  eventid     group#   script      
+  xxxxx10       5      13_p`off   "turns pin 13 off"
+  xxxxx12       5      13_p`flash "flash pin 13"
+  xxxxx57       5      13_p`on    "turn pin 13 on"
+```
+These eventids share group-variable 5, so the first eventid xxxxx10 results in pin 13 turning off, etc.  
 
  
