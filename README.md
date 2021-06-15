@@ -744,6 +744,6 @@ For example:
   xxxxx12       5      13_p`flash "flash pin 13"
   xxxxx57       5      13_p`on    "turn pin 13 on"
 ```
-These eventids share group-variable 5, so the first eventid xxxxx10 results in pin 13 turning off, etc.  
+These eventids share group-variable 5, so the first eventid xxxxx10 results in pin 13 turning off, the second makes it flash, and the third turns it on.  
 
  
