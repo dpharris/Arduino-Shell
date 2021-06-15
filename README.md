@@ -689,10 +689,10 @@ In this example, the two lower bits are used to represent aspects:
 
 The Shell was extended so that several scripts could be operating, to implement effects on multiple pins, in (pseudo-) parallel.  For example, one pin might be flashing, while another fades.  These modifications allow these scripts to execute independently to achieve their effects.  
 
-#### Yielding
+### Yielding
 Since scripts are executed in (pseudo-)parallel, each script needs to be able to yield back to the main code so that other scripts can be executed.  This is done automatically by yielding at each **Delay**, and at each **loop**, **while**, **if**, or **else** block, using the re-entry code described below, which returns the active context and location in the code. 
 
-#### Re-entry
+### Re-entry
 Since each script uses the same execute() code, execute() **must** to be re-entrant.  To allow this, a context (ctx) is maintained across activations and a switch-statement is used to return that activation to its previous location in the code.  Since the original shell-code also used a switch statement, which disrupted this method, the original Shell switch statement was replaced with if-then-else statements.  Formatting was used to try to maintain the same feel to the code.  
 
 On entry to, or reentry to, the execute() routine, the code below uses a switch-statement to select the line of code to return to, marked by a case-statement labeled with its line number.  The code looks like this:
@@ -734,7 +734,7 @@ As an example, the exec() macro is used in the 'while' code: '{ block-code }w'
 
 
 
-#### Implementing Script Groups
+### Implementing Script Groups
 Since some effects will use infinite while-blocks to produce effects on a pin, there has to be a way to stop these effects, or substitute another effect for that pin.  This is done by assigning a group-variable-umber to a set of eventids.  The group-variable indicates which of its associated scripts is active.  When another eventid in that group is received, it overwrites its id into that group-variable.  
 
 For example:
