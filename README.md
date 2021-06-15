@@ -720,14 +720,14 @@ The macro is;
 ```
 When called, the macro intitializes a new context to the value 1, calls the shell with this new context via the execute() routine, records the following linenumber into ctx->ccrLine, and defines a new case-statement with that same line-number as its label, so that the switch statement can return execution there.  
 
-As an example, the exec() macro is used in the 'while' code: '{ block-code flag }w'
+As an example, the exec() macro is used in the 'while' code: '{ block-code }w'
 ```
-   } else if (ctx->op == 'w') {        // { block-code flag } -- | execute block while
-     ctx->sp = (const char*) pop();    // pops the stack-pointer, and stores it into ctx
+   } else if (ctx->op == 'w') {        // { block-code } -- | execute block while
+     ctx->sp = (const char*) pop();    // pops the address of the code-block, and stores it into ctx
      do {                              // the body of the while-loop
        exec(ctx->sp);                  // execute the block-code once, then yield, remembering
                                        //    the next line-number for the next activation.
-     } while (pop());                  // test the flag, and continue while-loop if true
+     } while (pop());                  // test the code-block's result, and continue while-loop if it is true
      continue;
 ```
 
