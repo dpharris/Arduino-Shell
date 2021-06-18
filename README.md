@@ -202,7 +202,7 @@ values, blocks, control structures and argument frames.
 **Comments are indicated by surrounding them with "'s, eg "a comment".
 They are skipped over in the scanning.  Do _not_ place them inside code 
 defintions, as that will slow down interpretation.  Rather, leave 
-them outside of definitions.  Eg: ***
+them outside of definitions.  Eg: **
 ```
 :double{2*}; "(n -- 2*n) twice"
 ```
@@ -238,7 +238,7 @@ and compressed to:
 Binary literal numbers are prefixed with `0b`, and hexadecimal with
 `0x` as in C.
 ```
- 10 . 0b10 . 0x10 .
+ 10 . 0b1010 . 0x0A .
 ```
 **Time literal numbers are prefixed with `Q`:**
 ```
