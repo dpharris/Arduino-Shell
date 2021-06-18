@@ -199,8 +199,8 @@ The shell script language allows several special forms such as literal
 values, blocks, control structures and argument frames.
 
 ### Comments (extension)
-**Comments are indicated by surrounding them with** "'**s, eg **"a comment"**.
-They are skipped over in the scanning.  Do _not_ place them inside code 
+**Comments are indicated by surrounding them with** "'s, eg "a comment".
+**They are skipped over in the scanning.  Do _not_ place them inside code 
 defintions, as that will slow down interpretation.  Rather, leave 
 them outside of definitions.  Eg: **
 ```
