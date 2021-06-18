@@ -121,7 +121,7 @@ Opcode | Parameters | Description | Forth
 \ | x1..xn y1..ym n -- y1..ym | n < 0: remove stack frame with n-elements |
 $ | n -- addr | address of n-element in frame |
 a | -- bytes entries | allocated eeprom |
-b | base -- | number print base | BASE
+b | base -- | number print base (**1=time**) | BASE
 c | xn..x1 n -- | drop n stack elements |
 d | x -- | drop | DROP
 e | flag if-block else-block -- | execute block on flag | IF ELSE THEN
