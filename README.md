@@ -477,16 +477,16 @@ Script:
 ```
 ### Continously Read Analog Pins
 
-Read analog pins (0..4) and print value continuously with 100 ms delay.
+Read analog pins (4..0) and print value continuously with 100 ms delay.
 ```
  {
-   0 4 { analogRead . } loop
+   4 0 { analogRead . } loop
    cr 100 delay true
  } while
 ```
 Script:
 ```
- {0,4{A.}lm100DT}w
+ {4,0{A.}lm100DT}w
 ```
 
 ### Termostat
