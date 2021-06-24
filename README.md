@@ -182,6 +182,7 @@ Opcode | Parameters | Description
 **_j** | -- data n addr | **j**2c async read: Wire.onreceive(addr,n,&data)
 **_F** | -- fastclock | returns **F**astClock value
 **_T** | -- realtime  | returns Real**T**imeClock value
+**_C** | -- lasteid | returns last eventid consumed
 **_P** | ch -- | **P**roduce the event for the channel
 **_R** | offset ch -- | Produce a **R**ange-eventid by adding offset to ch's eid
 **_r** | -- range | value in last **r**ange received
