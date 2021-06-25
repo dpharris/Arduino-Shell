@@ -182,10 +182,10 @@ Opcode | Parameters | Description
 **_j** | -- data n addr | **j**2c async read: Wire.onreceive(addr,n,&data)
 **_F** | -- fastclock | returns **F**astClock value
 **_T** | -- realtime  | returns Real**T**imeClock value
-[**_C** | -- lasteid | returns last eventid consumed Not implemented]
+**_C** | -- lasteid | returns last eventid consumed [Not implemented]
 **_P** | ch -- | **P**roduce the event for the channel
-[**_R** | offset ch -- | Produce a **R**ange-eventid by adding offset to ch's eid Not implemented]
-[**_r** | -- range | value in last **r**ange received Not implemented]
+**_R** | offset ch -- | Produce a **R**ange-eventid by adding offset to ch's eid [Not implemented]
+**_r** | -- range | value in last **r**ange received [Not implemented]
 **_E** | -- | print the script definitions in **E**eprom
 **_Y** | n -- | print the script associated with eventid-n
 **_Y** | 0 -- | print all scripts associated with eventids
